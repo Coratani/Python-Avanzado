@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap');
+h1{
+    font-family: 'Bree Serif', serif;
+    color:green;
+}
+#formulario{
+    border: solid;
+    width: 50%;
+    margin: auto;
+    padding: 15px;
+    background-color: lightcyan;
+}
+#galeria img{
+    width: 100%;
+    height: auto;
+}
+#galeria img:hover{
+    border: 5px solid white;
+}
+#galeria p{
+    font-family: 'Bree Serif', serif;
+    text-align: center;
+}

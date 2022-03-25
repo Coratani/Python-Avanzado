@@ -1,0 +1,7 @@
+import pyb, time
+
+
+while True:
+    if pyb.Switch().value():
+        pyb.LED(4).toggle()
+    time.sleep_ms(300)

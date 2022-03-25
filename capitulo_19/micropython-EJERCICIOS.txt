@@ -1,0 +1,46 @@
+import machine,time,pyb,framebuf
+
+slider=machine.Pin("Y4")
+lcd1=machine.Pin("X9")
+lcd2=machine.Pin("X10")
+ledext=machine.Pin("Y12")
+liverde=pyb.LED(2)
+lirojo=pyb.LED(1)
+i2c=machine.I2C(scl=lcd1, sda=lcd2)
+adc=pyb.ADC(slider)
+
+pelota = framebuf.FrameBuffer(bytearray(4 * 4 // 8), 4, 4, framebuf.MONO_HLSB)
+lcd = framebuf.FrameBuffer(bytearray(64 * 32 // 8), 64, 32, framebuf.MONO_HLSB)
+
+#Formacion de la pelota
+pelota.fill(1)
+pelota.pixel(0,0,0)
+pelota.pixel(3,0,0)
+pelota.pixel(0,3,0)
+pelota.pixel(3,3,0)
+
+movi=4
+x=0
+while not pyb.Switch().value():
+    velocidad=adc.read()#La posicion del slider determina la velocidad
+    x+=movi   
+    if x>=52 or x<=11:
+        lirojo.on()
+        ledext.on()
+        liverde.off()
+        color="rojo"
+    if x >=60 or x<=0:
+        movi=-movi    
+    else:
+        lirojo.off()
+        ledext.off()
+        liverde.on()
+        color="verde"
+    lcd.fill(0)
+    lcd.vline(11,0,32,1)
+    lcd.vline(52,0,32,1)
+    lcd.blit(pelota, x, 14)
+    i2c.writeto(8, lcd)
+    print("posición x:",x,"retraso:",velocidad,"color:",color)
+    time.sleep_ms(velocidad)
+print("fin")

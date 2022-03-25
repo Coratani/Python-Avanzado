@@ -1,0 +1,13 @@
+import machine,pyb,time
+pin=machine.Pin("Y4")
+adc=pyb.ADC(pin)
+
+anterior=0
+print("Lectura del ADC")
+while not pyb.Switch().value():
+    lectura=adc.read()
+    if lectura != anterior:
+        anterior=lectura
+        print(lectura)
+    time.sleep_ms(300)
+print("Fin de la lectura")

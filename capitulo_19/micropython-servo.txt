@@ -1,0 +1,16 @@
+import pyb, time
+
+def boton():
+    print("Esperando la pulsacion..")
+    while not pyb.Switch().value():
+        time.sleep_ms(300)
+
+servo=pyb.Servo(1)
+
+angulos=[-90,-30,10,60,90]
+
+for a in angulos:
+    boton()
+    servo.angle(a,100)
+    time.sleep_ms(500)
+    print("Lectura actual:", servo.angle())

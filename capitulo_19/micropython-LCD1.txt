@@ -1,0 +1,34 @@
+import machine,time,framebuf
+
+scl=machine.Pin("X9")
+sda=machine.Pin("X10")
+i2c=machine.I2C(scl=scl,sda=sda)
+
+lista=i2c.scan()
+print("Direccion empleada:",lista[0])
+
+lcd=framebuf.FrameBuffer(bytearray(64*32//8),64,32,framebuf.MONO_HLSB)
+for i in[1,0,1,0]:
+    lcd.fill(i)
+    i2c.writeto(8,lcd)
+    time.sleep_ms(10)
+
+x=0
+y=0
+ancho=64
+alto=32
+
+for i in range(1,5):
+    print("coordenadas:",x,y,"ancho:",ancho,"alto:",alto)
+    lcd.rect(x,y,ancho,alto,1)
+    i2c.writeto(8,lcd)
+    time.sleep_ms(20)
+    x+=2
+    y+=2
+    ancho-=4
+    alto-=4
+lcd.text("micro",12,8,1)
+i2c.writeto(8,lcd)
+lcd.text("python",8,16,1)
+i2c.writeto(8,lcd)
+print("fin")

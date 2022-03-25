@@ -1,0 +1,10 @@
+
+import pyb
+import time
+
+leds=[pyb.LED(i) for i in range(1,5)]
+
+for veces in range(4):
+    for i in range(0,4):
+        leds[i].toggle()
+        time.sleep_ms(300)

@@ -1,0 +1,36 @@
+import machine,time,framebuf,pyb
+
+x9=machine.Pin("X9")
+x10=machine.Pin("X10")
+y4=machine.Pin("Y4")
+i2c=machine.I2C(scl=x9,sda=x10)
+adc=pyb.ADC(y4)
+
+lcd=framebuf.FrameBuffer(bytearray(64*32//8),64,32,framebuf.MONO_HLSB)
+cara=framebuf.FrameBuffer(bytearray(7*7//8),7,7,framebuf.MONO_HLSB)
+
+cara.fill(0)
+cara.fill_rect(0,0,7,7,1)
+cara.pixel(0,0,0)
+cara.pixel(6,0,0)
+cara.pixel(0,6,0)
+cara.pixel(6,6,0)
+
+cara.pixel(2,2,0)
+cara.pixel(4,2,0)
+cara.hline(2,5,3,0)
+cara.pixel(1,4,0)
+cara.pixel(5,4,0)
+
+anterior=0
+while not pyb.Switch().value():
+    lectura=adc.read()
+    if lectura != anterior:
+        anterior=lectura
+        x=int(lectura/4.47)
+        print("lectura adc:",lectura,"x:",x)
+        lcd.fill(0)
+        lcd.blit(cara,x,12)
+        i2c.writeto(8,lcd)
+    time.sleep_ms(300)
+print("fin")
